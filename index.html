@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Games by John Slagboom</title>
+<meta name="description" content="Free browser games by John Slagboom. No downloads, no ads.">
+<style>
+  :root {
+    --bg: #0e0820; --bg2: #1c1238; --card: #1f1640; --line: #6b5320;
+    --gold: #e8c060; --gold2: #fff0b8; --text: #efe6d2; --muted: #b8a98c; --red: #b3262f;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; color: var(--text); font-family: Georgia, 'Palatino Linotype', serif;
+    background: radial-gradient(ellipse at 50% -10%, #3a2566 0%, var(--bg2) 35%, var(--bg) 75%) fixed, var(--bg);
+  }
+  header { text-align: center; padding: 56px 16px 24px; }
+  h1 {
+    margin: 0; font-size: clamp(34px, 7vw, 64px); letter-spacing: 1px; color: var(--gold);
+    text-shadow: 0 2px 0 #5a3d0c, 0 0 24px rgba(232,192,96,0.35);
+  }
+  header p { margin: 10px 0 0; color: var(--muted); font-size: 17px; font-style: italic; }
+  main { max-width: 1100px; margin: 0 auto; padding: 8px 16px 64px; }
+  section { margin-top: 36px; }
+  h2 {
+    display: flex; align-items: center; gap: 14px; margin: 0 0 18px; font-size: 22px; color: var(--gold2); font-weight: normal;
+  }
+  h2::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--line), transparent); }
+  h2 .tag { font-size: 13px; padding: 3px 10px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 22px; }
+  .card {
+    display: block; text-decoration: none; color: inherit; background: var(--card); border: 2px solid var(--line);
+    border-radius: 14px; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+    transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease; cursor: pointer;
+  }
+  .card:hover, .card:focus-visible { transform: translateY(-4px); border-color: var(--gold); box-shadow: 0 12px 30px rgba(0,0,0,0.55), 0 0 18px rgba(232,192,96,0.25); outline: none; }
+  .thumb { position: relative; aspect-ratio: 16 / 9; background: #120b26; }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; image-rendering: auto; }
+  .badge {
+    position: absolute; top: 10px; left: 10px; font-size: 12px; padding: 4px 10px; border-radius: 999px;
+    background: rgba(14,8,32,0.85); border: 1px solid var(--gold); color: var(--gold2);
+  }
+  .badge.adult { border-color: #e05a5a; color: #ffd2d2; }
+  .body { padding: 14px 16px 18px; }
+  .body h3 { margin: 0 0 6px; font-size: 20px; color: var(--gold2); }
+  .body p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.45; }
+  .soon { opacity: .6; cursor: default; }
+  .soon:hover { transform: none; border-color: var(--line); }
+  footer { text-align: center; color: var(--muted); font-size: 14px; padding: 0 16px 40px; }
+  footer a { color: var(--gold); }
+  dialog {
+    max-width: 440px; width: calc(100% - 32px); background: var(--bg2); color: var(--text); border: 2px solid var(--gold);
+    border-radius: 14px; padding: 26px 24px 22px; text-align: center;
+  }
+  dialog::backdrop { background: rgba(0,0,0,0.7); }
+  dialog h3 { margin: 0 0 10px; color: var(--gold2); font-size: 22px; }
+  dialog p { margin: 0 0 20px; color: var(--muted); line-height: 1.5; }
+  .btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btns button { font: inherit; font-size: 16px; padding: 11px 22px; border-radius: 10px; cursor: pointer; border: 1px solid var(--gold); }
+  .yes { background: var(--red); color: #fff; }
+  .no { background: transparent; color: var(--gold2); }
+</style>
+</head>
+<body>
+<header>
+  <h1>Games</h1>
+  <p>Free browser games by John Slagboom. No downloads, no ads.</p>
+</header>
+<main id="list"></main>
+<footer>&copy; <span id="yr"></span> John Slagboom &middot; <a href="https://www.johnslagboom.com">johnslagboom.com</a></footer>
+
+<dialog id="gate">
+  <h3>Mature content</h3>
+  <p id="gateText">This game contains realistic violence and gore. It is for adults only.</p>
+  <div class="btns"><button class="yes" id="gateYes">I am 18 or older</button><button class="no" id="gateNo">Go back</button></div>
+</dialog>
+
+<script>
+// ── Game list ──────────────────────────────────────────────────────────────
+// To add a game: push it to its own GitHub repo with Pages turned on. It then
+// serves at games.johnslagboom.com/<repo>/ automatically. Then add one entry
+// here, and add a 640x360 thumbnail to img/.
+// section: 'kids' | 'all' | 'adult'. 'adult' games sit in their own section behind an 18+ check.
+// status: 'live' | 'soon'.
+const GAMES = [
+  {
+    title: 'Alphabet Knight: The Castle Quest',
+    url: '/alphabet-knight/fantasy.html',
+    img: 'img/alphabet-knight-castle-quest.jpg',
+    badge: 'Ages 2 to 5',
+    desc: 'A 3D adventure down the road to a giant castle. Find letters, words, numbers and sums with friendly creatures. Works on tablets.',
+    section: 'kids', status: 'live',
+  },
+  {
+    title: "Sir Knight's Alphabet Adventure",
+    url: '/alphabet-knight/',
+    img: 'img/alphabet-knight-classic.jpg',
+    badge: 'Ages 3 to 6',
+    desc: 'The original. A hand-drawn knight marches through the kingdom. Type each letter to win. Needs a keyboard.',
+    section: 'kids', status: 'live',
+  },
+];
+
+const SECTIONS = [
+  { id: 'kids', title: 'For little knights', tag: 'Kids' },
+  { id: 'all', title: 'For everyone', tag: 'All ages' },
+  { id: 'adult', title: 'Grown-up games', tag: '18+' },
+];
+
+// ── Render ─────────────────────────────────────────────────────────────────
+const list = document.getElementById('list');
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+SECTIONS.forEach(sec => {
+  const games = GAMES.filter(g => g.section === sec.id);
+  if (!games.length) return;
+  const el = document.createElement('section');
+  el.innerHTML = `<h2>${esc(sec.title)} <span class="tag">${esc(sec.tag)}</span></h2><div class="grid"></div>`;
+  const grid = el.querySelector('.grid');
+  games.forEach(g => {
+    const soon = g.status === 'soon';
+    const a = document.createElement(soon ? 'div' : 'a');
+    a.className = 'card' + (soon ? ' soon' : '');
+    if (!soon) a.href = g.url;
+    if (g.section === 'adult') a.dataset.adult = '1';
+    a.innerHTML = `<div class="thumb">${g.img ? `<img src="${esc(g.img)}" alt="" loading="lazy">` : ''}
+      <span class="badge${g.section === 'adult' ? ' adult' : ''}">${esc(soon ? 'Coming soon' : g.badge || '')}</span></div>
+      <div class="body"><h3>${esc(g.title)}</h3><p>${esc(g.desc)}</p></div>`;
+    grid.appendChild(a);
+  });
+  list.appendChild(el);
+});
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+// ── 18+ gate for adult games ───────────────────────────────────────────────
+const gate = document.getElementById('gate');
+let pending = null;
+const ok = () => { try { return localStorage.getItem('adultOk') === '1'; } catch (e) { return false; } };
+list.addEventListener('click', e => {
+  const a = e.target.closest('a[data-adult]');
+  if (!a || ok()) return;
+  e.preventDefault(); pending = a.href; gate.showModal();
+});
+document.getElementById('gateYes').onclick = () => {
+  try { localStorage.setItem('adultOk', '1'); } catch (e) {}
+  gate.close(); if (pending) location.href = pending;
+};
+document.getElementById('gateNo').onclick = () => { pending = null; gate.close(); };
+</script>
+</body>
+</html>
