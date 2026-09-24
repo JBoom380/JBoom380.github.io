@@ -46,6 +46,14 @@
   .body h3 { margin: 0 0 6px; font-size: 20px; color: var(--gold2); }
   .body p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.45; }
   .soon { opacity: .6; cursor: default; }
+  .thumb:empty, .thumb:has(> .badge:only-child) { background: radial-gradient(circle at 50% 60%, #3a1420, #120b26 70%); }
+  section.kids {
+    margin-top: 56px; padding: 22px 20px 26px; border-radius: 18px; border: 2px dashed #7fb069;
+    background: linear-gradient(160deg, rgba(76,140,74,0.18), rgba(58,37,102,0.25));
+  }
+  section.kids h2 { color: #c9f29b; }
+  section.kids h2::after { background: linear-gradient(90deg, #7fb069, transparent); }
+  section.kids .tag { border-color: #7fb069; color: #c9f29b; }
   .soon:hover { transform: none; border-color: var(--line); }
   footer { text-align: center; color: var(--muted); font-size: 14px; padding: 0 16px 40px; }
   footer a { color: var(--gold); }
@@ -85,6 +93,14 @@
 // status: 'live' | 'soon'.
 const GAMES = [
   {
+    title: 'Open-world fantasy',
+    url: '',
+    img: '',
+    badge: '18+',
+    desc: 'Explore a dark fantasy world and fight real monsters. For adults.',
+    section: 'adult', status: 'soon',
+  },
+  {
     title: 'Alphabet Knight: The Castle Quest',
     url: '/alphabet-knight/fantasy.html',
     img: 'img/alphabet-knight-castle-quest.jpg',
@@ -102,20 +118,21 @@ const GAMES = [
   },
 ];
 
+// Main games come first (adult and all-ages together). Kids games get their own corner below.
 const SECTIONS = [
-  { id: 'kids', title: 'For little knights', tag: 'Kids' },
-  { id: 'all', title: 'For everyone', tag: 'All ages' },
-  { id: 'adult', title: 'Grown-up games', tag: '18+' },
+  { ids: ['adult', 'all'], title: 'All games', tag: '' },
+  { ids: ['kids'], title: 'Kids corner', tag: 'Ages 2 to 6', kids: true },
 ];
 
 // ── Render ─────────────────────────────────────────────────────────────────
 const list = document.getElementById('list');
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 SECTIONS.forEach(sec => {
-  const games = GAMES.filter(g => g.section === sec.id);
+  const games = GAMES.filter(g => sec.ids.includes(g.section));
   if (!games.length) return;
   const el = document.createElement('section');
-  el.innerHTML = `<h2>${esc(sec.title)} <span class="tag">${esc(sec.tag)}</span></h2><div class="grid"></div>`;
+  if (sec.kids) el.className = 'kids';
+  el.innerHTML = `<h2>${esc(sec.title)}${sec.tag ? ` <span class="tag">${esc(sec.tag)}</span>` : ''}</h2><div class="grid"></div>`;
   const grid = el.querySelector('.grid');
   games.forEach(g => {
     const soon = g.status === 'soon';
