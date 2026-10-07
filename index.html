@@ -151,11 +151,6 @@
 <main id="list"></main>
 <footer>&copy; <span id="yr"></span> John Slagboom &middot; <a href="https://www.johnslagboom.com">johnslagboom.com</a></footer>
 
-<dialog id="gate">
-  <h3>Mature content</h3>
-  <p id="gateText">This game contains realistic violence and gore. It is for adults only.</p>
-  <div class="btns"><button class="yes" id="gateYes">I am 18 or older</button><button class="no" id="gateNo">Go back</button></div>
-</dialog>
 
 <script>
 // ── Game list ──────────────────────────────────────────────────────────────
@@ -226,7 +221,7 @@ function card(g, hero) {
   const a = document.createElement(soon ? 'div' : 'a');
   a.className = 'card' + (soon ? ' soon' : '');
   if (!soon) a.href = g.url;
-  if (g.section === 'adult') a.dataset.adult = '1';
+  
   const meta = soon ? 'Coming soon' : (g.meta || '');
   const info = `<div class="info">${hero ? '<p class="kicker">Featured</p>' : ''}<h3>${esc(g.title)}</h3>
       ${meta ? `<p class="meta${g.section === 'adult' ? ' adult' : ''}">${esc(meta)}</p>` : ''}
@@ -252,20 +247,6 @@ SECTIONS.forEach(sec => {
 });
 document.getElementById('yr').textContent = new Date().getFullYear();
 
-// ── 18+ gate for adult games ───────────────────────────────────────────────
-const gate = document.getElementById('gate');
-let pending = null;
-const ok = () => { try { return localStorage.getItem('adultOk') === '1'; } catch (e) { return false; } };
-list.addEventListener('click', e => {
-  const a = e.target.closest('a[data-adult]');
-  if (!a || ok()) return;
-  e.preventDefault(); pending = a.href; gate.showModal();
-});
-document.getElementById('gateYes').onclick = () => {
-  try { localStorage.setItem('adultOk', '1'); } catch (e) {}
-  gate.close(); if (pending) location.href = pending;
-};
-document.getElementById('gateNo').onclick = () => { pending = null; gate.close(); };
 </script>
 </body>
 </html>
