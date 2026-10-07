@@ -5,72 +5,145 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Games by John Slagboom</title>
 <meta name="description" content="Free browser games by John Slagboom. No downloads, no ads.">
+<meta name="theme-color" content="#070707">
 <style>
   :root {
-    --bg: #0e0820; --bg2: #1c1238; --card: #1f1640; --line: #6b5320;
-    --gold: #e8c060; --gold2: #fff0b8; --text: #efe6d2; --muted: #b8a98c; --red: #b3262f;
+    --bg: #070707; --bg2: #14110d; --panel: #100e0b;
+    --gold: #e8c060; --gold2: #fff0b8; --text: #efe6d2; --muted: #b9ad96; --dim: #8f8574;
+    --line: rgba(232,192,96,0.22); --red: #b3262f; --green: #a9dc7f;
+    --serif: Georgia, 'Palatino Linotype', 'Book Antiqua', serif;
+    --sans: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
   }
   * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
   body {
-    margin: 0; min-height: 100vh; color: var(--text); font-family: Georgia, 'Palatino Linotype', serif;
-    background: radial-gradient(ellipse at 50% -10%, #3a2566 0%, var(--bg2) 35%, var(--bg) 75%) fixed, var(--bg);
+    margin: 0; min-height: 100vh; color: var(--text); font-family: var(--serif); overflow-x: hidden;
+    background: var(--bg);
   }
-  header { text-align: center; padding: 56px 16px 24px; }
+  .bg { position: fixed; inset: 0; z-index: -1; pointer-events: none; background: var(--bg) url('img/bg-street.jpg') center 40% / cover no-repeat; }
+  .bg::after {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 120% 90% at 50% 35%, rgba(7,7,7,0.25) 0%, rgba(7,7,7,0.55) 55%, rgba(7,7,7,0.85) 100%),
+                linear-gradient(180deg, rgba(7,7,7,0) 0%, rgba(7,7,7,0.35) 55%, rgba(7,7,7,0.7) 100%);
+  }
+  header { max-width: 1160px; margin: 0 auto; padding: 56px 16px 8px; }
   h1 {
-    margin: 0; font-size: clamp(34px, 7vw, 64px); letter-spacing: 1px; color: var(--gold);
-    text-shadow: 0 2px 0 #5a3d0c, 0 0 24px rgba(232,192,96,0.35);
+    margin: 0; font-size: clamp(38px, 7vw, 68px); line-height: 1; letter-spacing: .5px; color: var(--gold);
+    text-shadow: 0 2px 0 #3a2706, 0 0 30px rgba(232,192,96,0.3), 0 2px 18px rgba(0,0,0,0.8);
   }
-  header p { margin: 10px 0 0; color: var(--muted); font-size: 17px; font-style: italic; }
-  main { max-width: 1100px; margin: 0 auto; padding: 8px 16px 64px; }
-  section { margin-top: 36px; }
+  header p { margin: 12px 0 0; color: var(--muted); font-size: 17px; font-style: italic; }
+  main { max-width: 1160px; margin: 0 auto; padding: 8px 16px 72px; }
+  section { margin-top: 44px; }
   h2 {
-    display: flex; align-items: center; gap: 14px; margin: 0 0 18px; font-size: 22px; color: var(--gold2); font-weight: normal;
+    display: flex; align-items: baseline; gap: 14px; margin: 0 0 20px;
+    font: 600 13px/1 var(--sans); letter-spacing: .22em; text-transform: uppercase; color: var(--gold);
   }
-  h2::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--line), transparent); }
-  h2 .tag { font-size: 13px; padding: 3px 10px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 22px; }
-  .card {
-    display: block; text-decoration: none; color: inherit; background: var(--card); border: 2px solid var(--line);
-    border-radius: 14px; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.45);
-    transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease; cursor: pointer;
+  h2::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--line), transparent); align-self: center; }
+  h2 .sub { font-weight: 400; letter-spacing: .12em; color: var(--dim); }
+
+  /* Cards */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 32px 26px; }
+  .card { display: block; text-decoration: none; color: inherit; border-radius: 12px; outline: none; }
+  .art {
+    position: relative; aspect-ratio: 16 / 9; border-radius: 12px; overflow: hidden; background: #0d0c0b;
+    box-shadow: 0 10px 28px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.06);
+    transition: transform .2s ease, box-shadow .2s ease;
   }
-  .card:hover, .card:focus-visible { transform: translateY(-4px); border-color: var(--gold); box-shadow: 0 12px 30px rgba(0,0,0,0.55), 0 0 18px rgba(232,192,96,0.25); outline: none; }
-  .thumb { position: relative; aspect-ratio: 16 / 9; background: #120b26; }
-  .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; image-rendering: auto; }
-  .badge {
-    position: absolute; top: 10px; left: 10px; font-size: 12px; padding: 4px 10px; border-radius: 999px;
-    background: rgba(14,8,32,0.85); border: 1px solid var(--gold); color: var(--gold2);
+  .art img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .4s ease, filter .2s ease; }
+  .art::after { content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06); transition: box-shadow .2s ease; }
+  a.card:hover .art, a.card:focus-visible .art { transform: translateY(-4px); box-shadow: 0 18px 38px rgba(0,0,0,0.6), 0 0 26px rgba(232,192,96,0.18); }
+  a.card:hover .art::after, a.card:focus-visible .art::after { box-shadow: inset 0 0 0 2px var(--gold); }
+  a.card:hover .art img, a.card:focus-visible .art img { transform: scale(1.03); }
+  a.card:focus-visible { outline: 3px solid var(--gold); outline-offset: 6px; }
+  .info { padding: 16px 2px 0; }
+  .info h3 { margin: 0; font-size: 22px; line-height: 1.2; font-weight: normal; color: var(--gold2); transition: color .2s ease; }
+  a.card:hover h3, a.card:focus-visible h3 { color: #fff; }
+  .meta { margin: 7px 0 0; font: 600 12px/1.4 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--gold); opacity: .85; }
+  .meta.adult { color: #f08a8a; }
+  .desc { margin: 10px 0 0; color: var(--muted); font-size: 15.5px; line-height: 1.5; }
+  .soon { cursor: default; }
+  .soon .art img { filter: grayscale(.6) brightness(.6); }
+
+  /* Featured hero */
+  .hero { margin-bottom: 40px; }
+  .hero .card { position: relative; }
+  .hero .art { aspect-ratio: 21 / 9; }
+  .hero .art img { object-position: 70% 80%; }
+  .hero .info {
+    position: absolute; left: 0; top: 0; bottom: 0; width: min(46%, 500px); padding: 40px 0 40px 44px;
+    display: flex; flex-direction: column; justify-content: center;
   }
-  .badge.adult { border-color: #e05a5a; color: #ffd2d2; }
-  .body { padding: 14px 16px 18px; }
-  .body h3 { margin: 0 0 6px; font-size: 20px; color: var(--gold2); }
-  .body p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.45; }
-  .soon { opacity: .6; cursor: default; }
-  .thumb:empty, .thumb:has(> .badge:only-child) { background: radial-gradient(circle at 50% 60%, #3a1420, #120b26 70%); }
+  .hero .art::before {
+    content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background: linear-gradient(90deg, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.6) 34%, transparent 58%);
+  }
+  .hero .info { z-index: 2; pointer-events: none; }
+  .hero .kicker { margin: 0 0 14px; font: 600 12px/1 var(--sans); letter-spacing: .26em; text-transform: uppercase; color: var(--gold); }
+  .hero h3 { font-size: clamp(30px, 3.6vw, 44px); line-height: 1.08; }
+  .hero .meta { margin-top: 12px; }
+  .hero .desc { color: #d6cbb3; font-size: 16.5px; }
+  .hero .cta {
+    display: inline-block; align-self: flex-start; margin-top: 22px; padding: 11px 22px; border-radius: 8px;
+    font: 600 14px/1 var(--sans); letter-spacing: .08em; text-transform: uppercase; color: #fff; background: var(--red);
+    transition: background .2s ease;
+  }
+  a.card:hover .cta, a.card:focus-visible .cta { background: #d0303a; }
+  .hero a.card:hover .art img, .hero a.card:focus-visible .art img { transform: scale(1.02); }
+  .hero a.card:hover .art, .hero a.card:focus-visible .art { transform: none; }
+
+  /* Kids corner */
   section.kids {
-    margin-top: 56px; padding: 22px 20px 26px; border-radius: 18px; border: 2px dashed #7fb069;
-    background: linear-gradient(160deg, rgba(76,140,74,0.18), rgba(58,37,102,0.25));
+    margin-top: 64px; padding: 28px 24px 32px; border-radius: 18px;
+    background: linear-gradient(160deg, rgba(60,110,58,0.22), rgba(10,14,10,0.82));
+    box-shadow: inset 0 0 0 1px rgba(169,220,127,0.22);
   }
-  section.kids h2 { color: #c9f29b; }
-  section.kids h2::after { background: linear-gradient(90deg, #7fb069, transparent); }
-  section.kids .tag { border-color: #7fb069; color: #c9f29b; }
-  .soon:hover { transform: none; border-color: var(--line); }
-  footer { text-align: center; color: var(--muted); font-size: 14px; padding: 0 16px 40px; }
+  section.kids h2 { color: var(--green); }
+  section.kids h2::after { background: linear-gradient(90deg, rgba(169,220,127,0.35), transparent); }
+  section.kids .meta { color: var(--green); }
+  section.kids a.card:hover .art::after, section.kids a.card:focus-visible .art::after { box-shadow: inset 0 0 0 2px var(--green); }
+  section.kids a.card:focus-visible { outline-color: var(--green); }
+
+  footer { text-align: center; color: var(--dim); font-size: 14px; padding: 0 16px 40px; }
   footer a { color: var(--gold); }
+  footer a:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
   dialog {
-    max-width: 440px; width: calc(100% - 32px); background: var(--bg2); color: var(--text); border: 2px solid var(--gold);
-    border-radius: 14px; padding: 26px 24px 22px; text-align: center;
+    max-width: 440px; width: calc(100% - 32px); background: var(--bg2); color: var(--text); border: 1px solid var(--gold);
+    border-radius: 14px; padding: 26px 24px 22px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.7);
   }
-  dialog::backdrop { background: rgba(0,0,0,0.7); }
-  dialog h3 { margin: 0 0 10px; color: var(--gold2); font-size: 22px; }
+  dialog::backdrop { background: rgba(0,0,0,0.75); }
+  dialog h3 { margin: 0 0 10px; color: var(--gold2); font-size: 22px; font-weight: normal; }
   dialog p { margin: 0 0 20px; color: var(--muted); line-height: 1.5; }
   .btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-  .btns button { font: inherit; font-size: 16px; padding: 11px 22px; border-radius: 10px; cursor: pointer; border: 1px solid var(--gold); }
-  .yes { background: var(--red); color: #fff; }
+  .btns button { font: 600 15px/1 var(--sans); padding: 13px 22px; border-radius: 8px; cursor: pointer; border: 1px solid var(--gold); }
+  .btns button:focus-visible { outline: 3px solid var(--gold2); outline-offset: 3px; }
+  .yes { background: var(--red); color: #fff; border-color: var(--red) !important; }
   .no { background: transparent; color: var(--gold2); }
+
+  @media (max-width: 760px) {
+    header { padding-top: 40px; }
+    section { margin-top: 32px; }
+    .grid { grid-template-columns: 1fr; gap: 30px; }
+    .hero .art { aspect-ratio: 4 / 3; }
+    .hero .art::before { display: none; }
+    .hero .art img { object-position: 72% 85%; }
+    .bg { background-image: url('img/bg-street-mobile.jpg'); background-position: center; }
+    .hero .info { position: static; width: auto; padding: 16px 2px 0; display: block; }
+    .hero .kicker { margin-bottom: 10px; }
+    .hero h3 { font-size: 28px; }
+    .hero .desc { color: var(--muted); font-size: 15.5px; }
+    .hero .cta { display: none; }
+    section.kids { margin-top: 48px; padding: 22px 16px 26px; margin-left: -4px; margin-right: -4px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .art, .art img, .info h3 { transition: none; }
+    a.card:hover .art, a.card:focus-visible .art { transform: none; }
+    a.card:hover .art img, a.card:focus-visible .art img { transform: none; }
+  }
 </style>
 </head>
 <body>
+<div class="bg" aria-hidden="true"></div>
 <header>
   <h1>Games</h1>
   <p>Free browser games by John Slagboom. No downloads, no ads.</p>
@@ -88,39 +161,37 @@
 // ── Game list ──────────────────────────────────────────────────────────────
 // To add a game: push it to its own GitHub repo with Pages turned on. It then
 // serves at games.johnslagboom.com/<repo>/ automatically. Then add one entry
-// here, and add a 640x360 thumbnail to img/.
-// section: 'kids' | 'all' | 'adult'. 'adult' games sit in their own section behind an 18+ check.
-// status: 'live' | 'soon'.
+// here, and add a 16:9 thumbnail (1280x720 or 640x360 JPG) to img/.
+// section: 'kids' | 'all' | 'adult'. 'adult' games sit behind an 18+ check.
+// status: 'live' | 'soon'. featured: true shows the game as the wide card at the top (heroImg: optional wide art for it).
+// cards show only the title and the description (John, 10/7/26).
 const GAMES = [
   {
-    title: 'Freebird Simulator',
-    url: '/freebird-simulator/',
-    img: 'img/freebird-simulator.jpg',
-    badge: '18+',
-    desc: 'An open-world dark fantasy RPG. Explore the cursed isle of Vael, fight monsters, and storm the citadel of the Bone King. Keyboard and mouse, or touch.',
-    section: 'adult', status: 'live',
+    title: 'SkyRunner',
+    url: '/skyrunner/',
+    img: 'img/skyrunner.jpg',
+    heroImg: 'img/skyrunner-hero.jpg',
+    desc: 'Fly a police hover cruiser through a rain-soaked neo-noir megacity at night. Weave through traffic, chain near misses and survive five districts.',
+    section: 'all', status: 'live', featured: true,
   },
   {
     title: 'Neon Rain: The Glass Saint',
     url: '/neon-rain/',
     img: 'img/neon-rain.jpg',
-    badge: 'Mature',
-    desc: 'A first-person noir detective shooter. Rain, a femme fatale, a dead partner and a statue everyone will kill for. Playable first chapter. Phone held upright.',
+    desc: 'A first-person noir detective shooter. Rain, a femme fatale, a dead partner and a statue everyone will kill for. Playable first chapter.',
     section: 'adult', status: 'live',
   },
   {
-    title: 'SkyRunner',
-    url: '/skyrunner/',
-    img: 'img/skyrunner.jpg',
-    badge: 'Phone, hold upright',
-    desc: 'Fly a police hover cruiser through a rain-soaked neo-noir megacity at night. Weave through traffic, chain near misses and survive five districts. Music by John Slagboom.',
-    section: 'all', status: 'live',
+    title: 'Freebird Simulator',
+    url: '/freebird-simulator/',
+    img: 'img/freebird-simulator.jpg',
+    desc: 'An open-world dark fantasy RPG. Explore the cursed isle of Vael, fight monsters, and storm the citadel of the Bone King. Keyboard and mouse, or touch.',
+    section: 'adult', status: 'live',
   },
   {
     title: 'Bum Rush',
     url: '/bum-rush/',
     img: 'img/bum-rush.jpg',
-    badge: 'A game by Jon Hill',
     desc: 'Ride a shopping cart through a giant warehouse store, powered by farts. Grab the list, dodge security, and reach checkout before closing.',
     section: 'all', status: 'live',
   },
@@ -128,7 +199,6 @@ const GAMES = [
     title: 'Alphabet Knight: The Castle Quest',
     url: '/alphabet-knight/fantasy.html',
     img: 'img/alphabet-knight-castle-quest.jpg',
-    badge: 'Ages 2 to 5',
     desc: 'A 3D adventure down the road to a giant castle. Find letters, words, numbers and sums with friendly creatures. Works on tablets.',
     section: 'kids', status: 'live',
   },
@@ -136,39 +206,48 @@ const GAMES = [
     title: "Sir Knight's Alphabet Adventure",
     url: '/alphabet-knight/',
     img: 'img/alphabet-knight-classic.jpg',
-    badge: 'Ages 3 to 6',
-    desc: 'The original. A hand-drawn knight marches through the kingdom. Type each letter to win. Needs a keyboard.',
+    desc: 'The original. A hand-drawn knight marches through the kingdom. Type each letter to win.',
     section: 'kids', status: 'live',
   },
 ];
 
 // Main games come first (adult and all-ages together). Kids games get their own corner below.
 const SECTIONS = [
-  { ids: ['adult', 'all'], title: 'All games', tag: '' },
-  { ids: ['kids'], title: 'Kids corner', tag: 'Ages 2 to 6', kids: true },
+  { ids: ['adult', 'all'], title: 'All games', sub: '' },
+  { ids: ['kids'], title: 'Kids corner', kids: true },
 ];
 
 // ── Render ─────────────────────────────────────────────────────────────────
 const list = document.getElementById('list');
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+function card(g, hero) {
+  const soon = g.status === 'soon';
+  const a = document.createElement(soon ? 'div' : 'a');
+  a.className = 'card' + (soon ? ' soon' : '');
+  if (!soon) a.href = g.url;
+  if (g.section === 'adult') a.dataset.adult = '1';
+  const meta = soon ? 'Coming soon' : (g.meta || '');
+  const info = `<div class="info">${hero ? '<p class="kicker">Featured</p>' : ''}<h3>${esc(g.title)}</h3>
+      ${meta ? `<p class="meta${g.section === 'adult' ? ' adult' : ''}">${esc(meta)}</p>` : ''}
+      <p class="desc">${esc(g.desc)}</p>${hero && !soon ? '<span class="cta">Play now</span>' : ''}</div>`;
+  const src = (hero && g.heroImg) || g.img;
+  const img = src ? `<img src="${esc(src)}" alt="" ${hero ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async">` : '';
+  a.innerHTML = `<div class="art">${img}</div>${info}`;
+  return a;
+}
+
 SECTIONS.forEach(sec => {
   const games = GAMES.filter(g => sec.ids.includes(g.section));
   if (!games.length) return;
   const el = document.createElement('section');
   if (sec.kids) el.className = 'kids';
-  el.innerHTML = `<h2>${esc(sec.title)}${sec.tag ? ` <span class="tag">${esc(sec.tag)}</span>` : ''}</h2><div class="grid"></div>`;
-  const grid = el.querySelector('.grid');
-  games.forEach(g => {
-    const soon = g.status === 'soon';
-    const a = document.createElement(soon ? 'div' : 'a');
-    a.className = 'card' + (soon ? ' soon' : '');
-    if (!soon) a.href = g.url;
-    if (g.section === 'adult') a.dataset.adult = '1';
-    a.innerHTML = `<div class="thumb">${g.img ? `<img src="${esc(g.img)}" alt="" loading="lazy">` : ''}
-      <span class="badge${g.section === 'adult' ? ' adult' : ''}">${esc(soon ? 'Coming soon' : g.badge || '')}</span></div>
-      <div class="body"><h3>${esc(g.title)}</h3><p>${esc(g.desc)}</p></div>`;
-    grid.appendChild(a);
-  });
+  el.innerHTML = `<h2>${esc(sec.title)}${sec.sub ? ` <span class="sub">${esc(sec.sub)}</span>` : ''}</h2>`;
+  const feat = games.find(g => g.featured);
+  if (feat) { const h = document.createElement('div'); h.className = 'hero'; h.appendChild(card(feat, true)); el.appendChild(h); }
+  const grid = document.createElement('div'); grid.className = 'grid';
+  games.filter(g => g !== feat).forEach(g => grid.appendChild(card(g, false)));
+  el.appendChild(grid);
   list.appendChild(el);
 });
 document.getElementById('yr').textContent = new Date().getFullYear();
