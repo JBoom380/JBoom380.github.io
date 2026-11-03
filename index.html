@@ -189,6 +189,7 @@ const GAMES = [
     img: 'img/freebird-simulator.jpg',
     desc: 'An open-world dark fantasy RPG. Explore the cursed isle of Vael, fight monsters, and storm the citadel of the Bone King. Keyboard and mouse, or touch.',
     section: 'adult', status: 'live',
+    hideUntil: '2026-11-04T12:00:00-08:00', // John 11/2: hidden until Wednesday afternoon
   },
   {
     title: 'Bum Rush',
@@ -196,6 +197,7 @@ const GAMES = [
     img: 'img/bum-rush.jpg',
     desc: 'Ride a shopping cart through a giant warehouse store, powered by farts. Grab the list, dodge security, and reach checkout before closing.',
     section: 'all', status: 'live',
+    hideUntil: '2026-11-04T12:00:00-08:00', // John 11/2: hidden until Wednesday afternoon
   },
   {
     title: 'Alphabet Knight: The Castle Quest',
@@ -240,7 +242,7 @@ function card(g, hero) {
 }
 
 SECTIONS.forEach(sec => {
-  const games = GAMES.filter(g => sec.ids.includes(g.section));
+  const games = GAMES.filter(g => sec.ids.includes(g.section) && !(g.hideUntil && Date.now() < Date.parse(g.hideUntil)));
   if (!games.length) return;
   const el = document.createElement('section');
   if (sec.kids) el.className = 'kids';
